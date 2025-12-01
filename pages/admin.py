@@ -5,7 +5,4 @@ from .models import Entry
 # Register your models here.
 @admin.register(Entry)
 class EntriesAdmin(admin.ModelAdmin):
-    list_display = (
-        "entry_title",
-        "publish_date"
-    )
+    list_display = ("entry_title", "publish_date")

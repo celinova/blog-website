@@ -1,0 +1,16 @@
+name: Pull request
+
+on:
+    pull_request:
+        branches:
+            - 'staging'
+
+jobs:
+    call-build-test:
+        uses: ./.github/workflows/build-test.yml
+    deploy:
+        needs: call-build-test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Tester
+              run: echo "This step will always run"

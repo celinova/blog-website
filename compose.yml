@@ -1,9 +1,57 @@
-version: "3.9"
+name: 'blog-website'
+
+x-django-environment: &django-environment
+  SECRET_KEY: ${SECRET_KEY:-django-insecure$$Personal_Website.settings.local}
+  ENV: ${ENV:-dev}
+  ALLOWED_HOSTS: ${ALLOWED_HOSTS:-127.0.0.1,localhost,0.0.0.0,django-dev-server}
+
+x-app: &blog-website
+  image: blog-website:latest
+  environment:
+    <<: *django-environment
+  restart: always
+  pull_policy: never
+  volumes:
+    - .:/Personal_Website
+    - tox:/tmp/.tox
+
 services:
-  web:
-    build: .
+  django-dev-server:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    image: blog-website:latest
+    pull_policy: build
+    <<: *blog-website
     ports:
-      - "8000:8000"
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/Blog-Website-Thing
+      - "0.0.0.0:8021:8000"
+    command: /dev-start
+    healthcheck:
+      test: "curl http://localhost:8000/health"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  django-production-server:
+    <<: *blog-website
+    ports:
+      - "0.0.0.0:8022:8000"
+    command: /prod-start
+    healthcheck:
+      test: "curl http://localhost:8022/health"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  django-test:
+    <<: *blog-website
+    restart: "no"
+    depends_on:
+      django-dev-server:
+        condition: service_healthy
+    command: /test-start
+
+volumes:
+  tox:

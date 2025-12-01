@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class Entry(models.Model):
     entry_title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True)
@@ -11,8 +12,12 @@ class Entry(models.Model):
 
     def __str__(self):
         return self.entry_title
-    
+
     # shortened content property for index page
-    @property 
+    @property
     def short_content(self):
-        return (self.entry_text[:200] + "...") if len(self.entry_text) > 140 else self.entry_text
+        return (
+            (self.entry_text[:200] + "...")
+            if len(self.entry_text) > 140
+            else self.entry_text
+        )
