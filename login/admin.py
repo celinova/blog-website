@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserChangeForm
 from .models import UserModel
 
+
 # change subclass later
 class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm

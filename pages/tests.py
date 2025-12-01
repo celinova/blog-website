@@ -6,13 +6,12 @@ from .models import Entry
 # UNIT TESTS
 # ----------------------------------------------------------------------
 
+
 class PageTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.entry = Entry.objects.create(
-            entry_title="test",
-            entry_text="lorem ipsum",
-            publish_date=timezone.now()
+            entry_title="test", entry_text="lorem ipsum", publish_date=timezone.now()
         )
 
     def test_check_existing_object(self):

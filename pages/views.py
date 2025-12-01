@@ -6,7 +6,7 @@ from .models import Entry
 
 def entries_index(request):
     entries = Entry.objects.all()
-    return render(request, 'entries_index.html', {'entries_index': entries})
+    return render(request, "entries_index.html", {"entries_index": entries})
 
 
 def entry_view(request, entry):
@@ -18,19 +18,22 @@ def entry_view(request, entry):
 def add_entry(request):
     # retrieve data from the "add page" form
     if request.method == "POST":
-        input_title = str(request.POST.get('title_field'))
-        input_body = str(request.POST.get('body_field'))
+        input_title = str(request.POST.get("title_field"))
+        input_body = str(request.POST.get("body_field"))
 
         # check for title collisions, not super inclined to do this by id ;P
         if input_title in Entry.objects.all():
-            return render(request, "entry_already_exists.html", {"input_title": input_title})
+            return render(
+                request, "entry_already_exists.html", {"input_title": input_title}
+            )
         else:
             created_entry = Entry.objects.create(
-                entry_title=input_title, 
-                entry_text=input_body, 
-                publish_date=timezone.now()
+                entry_title=input_title,
+                entry_text=input_body,
+                publish_date=timezone.now(),
             )
             return render(request, "entry_added.html", {"created_entry": created_entry})
+
 
 # @login_required
 # def edit_entry(request):

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+# Generate self-signed SSL Certificate (will add Gunicorn later)
+# mkdir -p /etc/ssl/private
+# openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+#     - keyout /etc/ssl/private/selfsigned.key \
+#     - out /etc/ssl/private/selfsigned.crt \
+#     - subj "/C=US/ST=State/L=City/O=Organization/OU=Department/CN=localhost"
+
+python manage.py migrate
+python manage.py runserver 0.0.0.0:8000 --verbosity 3

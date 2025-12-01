@@ -18,10 +18,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
+from django.http import HttpResponse
+
+
+def health_check_view(request):
+    return HttpResponse("OK", status=200)
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("health/", health_check_view, name="health-check"),
     path("login/", include("django.contrib.auth.urls")),
     path("", TemplateView.as_view(template_name="homepage.html"), name="home"),
-#    path("", include("pages.urls")),
+    #    path("", include("pages.urls")),
 ]
